@@ -1095,7 +1095,7 @@ Start-Inventory -StartType InvRemote `
 [ГГГГ-ММ-ДД ЧЧ:ММ:СС];[Компьютер];[Модуль];[Сообщение]
 ```
 
-**Примеры записей с аудитом безопасности:**
+**Примеры записей:**
 ```
 2025.04.02 14:08:01;Server1;Start-Inventory.psm1;Запуск процедуры сбора
 2025.04.02 14:08:01;Server1;CheckFolder.ps1;Не задан параметр -InvFolderResult. Будет использоваться каталог C:\SHARE\Inventory\InvResult.
