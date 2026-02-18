@@ -686,7 +686,7 @@ test_scenario: |
 
 ## 7.6. BPMN-диаграмма процессов
 
-<center><img src="Docs/bpmn.png" width="70%"></center>
+<center><img src="Docs/bpmn.png" width="90%"></center>
 
 ## 8. Спецификация и форматы
 
