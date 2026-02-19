@@ -1144,3 +1144,294 @@ Start-Inventory -StartType InvRemote `
 ### 12.4. Ограничения производительности и масштабирования
 - При удаленном сборе большого количества компьютеров (более 150-200) за один сеанс рекомендуется использовать параметр `-InvRemoteDayOld` для исключения часто опрашиваемых машин и снижения нагрузки на сеть (NFR-02). Так же рекомендуется использовать процедуру асинхронного сбора (UC-06), создавая задания в планировщике с использованием доменных политик.
 - Время сбора на одном компьютере может превышать 5 минут (NFR-01) при слабой аппаратной конфигурации (менее 4 ядер CPU, 8 ГБ RAM) или при сборе большого объема данных (например, глубокий анализ NTFS-прав через модуль `shr`).
+
+## 13. Приложения
+
+### 13.1. Диаграмма последовательности UC-01
+
+@startuml
+'UC-01: Удаленный сбор инвентаризационной информации со всего домена.
+actor Admin
+participant ":Start-Inventory" as StartInv
+participant ":InvAnyComputers" as AnyComputers
+participant ":InvResult" as Result
+participant ":Computer" as Comp
+participant ":ActiveDirectory" as AD
+
+Admin -> StartInv: Start-Inventory -StartType InvRemoteCreateResult (...)
+
+activate StartInv
+
+ref over StartInv, AnyComputers, Result : UC-INC-01: Проверка и подготовка инфраструктуры\n(проверка/создание каталогов InvAnyComputers, InvResult, InvLogs)
+
+ref over StartInv : UC-INC-05: Валидация типов собираемой информации\n (получение списка типов для сбора)
+
+ref over StartInv, AD : UC-INC-03: Получение перечня компьютеров\n(запрос к AD, возврат списка)
+
+loop для каждого компьютера в списке
+  ref over StartInv, AnyComputers, Comp : UC-INC-02: Проверка актуальности информации\n(проверка наличия файлов в InvAnyComputers,\n сравнение с InvRemoteDayOld)
+  
+    alt требуется сбор
+        ref over StartInv, Comp : UC-INC-04: Проверка доступности компьютера
+    
+        alt компьютер доступен
+            loop для каждого типа информации
+                StartInv -> Comp: Удалённый сбор
+                activate Comp
+                    Comp --> StartInv: Инвентаризационная информация
+                deactivate Comp
+
+                StartInv -> AnyComputers: Сохранить файл ComputerName.Тип.csv
+            end
+        else недоступен
+            StartInv -> StartInv: Логировать ошибку
+        end
+    else информация актуальна
+        StartInv -> StartInv: Логировать пропуск
+    end
+end
+
+ref over StartInv, AnyComputers, Result : UC-04: Консолидация и обработка информации\n(удаление старых файлов в InvAnyComputers,\n чтение из InvAnyComputers, запись в InvResult)
+
+StartInv --> Admin: Готово
+deactivate StartInv
+@enduml
+
+### 13.2. Диаграмма последовательности UC-02
+
+@startuml
+'UC-02: Локальный сбор с автономного компьютера
+actor "Scheduled Task" as Scheduler
+participant ":Start-Inventory" as StartInv
+participant ":InvAnyComputers" as AnyComputers
+participant ":InvFolderZIPFiles" as ZIP
+participant ":Computer" as Comp
+
+Scheduler -> StartInv: Start-Inventory -StartType InvLocal (...)
+
+activate StartInv
+
+ref over StartInv, AnyComputers, ZIP : UC-INC-01: Проверка и подготовка инфраструктуры\n(проверка/создание локальных каталогов)
+
+ref over StartInv : UC-INC-05: Валидация типов собираемой информации\n(получение списка типов)
+
+ref over StartInv, AnyComputers, Comp : UC-INC-02: Проверка актуальности информации\n(проверка наличия файлов в InvAnyComputers,\n сравнение с DayOld)
+
+alt требуется сбор
+    loop для каждого типа информации
+        StartInv -> Comp: Локальный сбор
+        activate Comp
+            Comp --> StartInv: Инвентаризационная информация
+        deactivate Comp
+
+        StartInv -> AnyComputers: Сохранить файл ComputerName.Тип.csv
+    end
+
+    alt указан параметр -InvFolderZIPFiles
+        StartInv -> AnyComputers: Прочитать все собранные файлы
+        AnyComputers --> StartInv: Файлы
+        StartInv -> ZIP: Упаковать файлы в inv.ComputerName.zip\nи сохранить в ZIP-каталог
+    end
+else информация актуальна
+    StartInv -> StartInv: Логировать пропуск
+end
+
+StartInv --> Scheduler: Завершено
+deactivate StartInv
+@enduml
+
+### 13.3. Диаграмма последовательности UC-03
+
+@startuml
+'UC-03: Выборочный сбор определенных типов информации
+actor Admin
+participant ":Start-Inventory" as StartInv
+participant ":InvAnyComputers" as AnyComputers
+participant ":Computer" as Comp
+participant ":ActiveDirectory" as AD 
+
+Admin -> StartInv: Start-Inventory -StartType InvRemote\n -SelectInvType hwr,swr,net (...)
+
+activate StartInv
+
+ref over StartInv, AnyComputers : UC-INC-01: Проверка и подготовка инфраструктуры\n(проверка/создание каталога InvAnyComputers)
+
+ref over StartInv : UC-INC-05: Валидация типов собираемой информации\n(фильтрация по переданным типам)
+
+ref over StartInv, AD : UC-INC-03: Получение перечня компьютеров\n(из параметра -InvComputerList, файла или OU)
+
+loop для каждого компьютера в списке
+    ref over StartInv, AnyComputers, Comp : UC-INC-02: Проверка актуальности информации\n(проверка наличия файлов в InvAnyComputers,\n сравнение с InvRemoteDayOld)
+
+    alt требуется сбор
+        ref over StartInv, Comp : UC-INC-04: Проверка доступности компьютера
+
+        alt компьютер доступен
+            loop для каждого выбранного типа
+                StartInv -> Comp: Удалённый сбор определенных типов
+                activate Comp
+                    Comp --> StartInv: Инвентаризационная информация
+                deactivate Comp
+
+                StartInv -> AnyComputers: Сохранить файл ComputerName.Тип.csv
+            end
+        else недоступен
+            StartInv -> StartInv: Логировать ошибку
+        end
+    else информация актуальна
+        StartInv -> StartInv: Логировать пропуск
+    end
+end
+
+StartInv --> Admin: Сбор завершён
+deactivate StartInv
+@enduml
+
+
+### 13.4. Диаграмма последовательности UC-04
+
+@startuml
+'UC-04: Объединение инвентаризационной информации для анализа
+actor Manager
+participant ":Start-Inventory" as StartInv
+participant ":InvAnyComputers" as AnyComputers
+participant ":InvResult" as Result
+participant ":InvFolderZIPFiles" as ZIP
+
+Manager -> StartInv: Start-Inventory -StartType CreateResult (...)
+
+activate StartInv
+
+ref over StartInv, AnyComputers, Result, ZIP : UC-INC-01: Проверка и подготовка инфраструктуры\n(проверка/создание каталогов)
+
+alt указан -InvFolderZIPFiles и каталог существует
+    StartInv -> ZIP: Найти все файлы inv.*.zip
+    activate ZIP
+        ZIP --> StartInv: Список ZIP-архивов
+    deactivate ZIP
+
+    loop для каждого ZIP
+        StartInv -> ZIP: Распаковать архив
+        ZIP --> StartInv: Файлы *.csv
+        StartInv -> AnyComputers: Сохранить распакованные файлы\n(с перезаписью)
+    end
+end
+
+alt указан -DayOld
+    StartInv -> AnyComputers: Удалить файлы старше DayOld
+end
+
+StartInv -> AnyComputers: Прочитать все файлы *.csv
+activate AnyComputers
+    AnyComputers --> StartInv: Список файлов и содержимое
+deactivate AnyComputers
+
+StartInv -> StartInv: Сгруппировать данные по типам
+
+StartInv -> Result: Записать итоговые файлы Тип.csv
+activate Result
+    Result --> StartInv: Подтверждение
+deactivate Result
+
+StartInv --> Manager: Готово
+deactivate StartInv
+@enduml
+
+
+### 13.5. Диаграмма последовательности UC-05
+
+@startuml
+'UC-05: Гибридный сбор из разных доменов и сегментов сети
+actor Admin
+participant ":Start-Inventory" as StartInv
+participant ":InvAnyComputers" as AnyComputers
+participant ":InvResult" as Result
+participant ":InvFolderZIPFiles" as ZIP
+participant ":Computer" as Comp
+participant ":ActiveDirectory" as AD
+
+== Сбор из основного домена ==
+Admin -> StartInv: Start-Inventory -StartType InvRemote (...)
+activate StartInv
+
+ref over StartInv, AnyComputers : UC-INC-01: Проверка и подготовка инфраструктуры\n(проверка/создание каталогов InvAnyComputers, InvResult, InvLogs)
+ref over StartInv : UC-INC-05: Валидация типов собираемой информации\n(получение списка типов)
+ref over StartInv, AD : UC-INC-03: Получение перечня компьютеров\n(запрос к AD domain1, возврат списка)
+
+loop для каждого компьютера в списке
+  ref over StartInv, AnyComputers, Comp : UC-INC-02: Проверка актуальности информации\n(проверка наличия файлов в InvAnyComputers,\n сравнение с InvRemoteDayOld)
+  
+    alt требуется сбор
+        ref over StartInv, Comp : UC-INC-04: Проверка доступности компьютера
+    
+        alt компьютер доступен
+            loop для каждого типа информации
+                StartInv -> Comp: Удалённый сбор
+                activate Comp
+                    Comp --> StartInv: Инвентаризационная информация
+                deactivate Comp
+
+                StartInv -> AnyComputers: Сохранить файл ComputerName.Тип.csv
+            end
+        else недоступен
+            StartInv -> StartInv: Логировать ошибку
+        end
+    else информация актуальна
+        StartInv -> StartInv: Логировать пропуск
+    end
+end
+deactivate StartInv
+
+== Сбор из дополнительного домена ==
+Admin -> StartInv: Start-Inventory -StartType InvRemote (...)
+... (аналогично первому домену) ...
+
+== Ручной перенос ZIP из DMZ ==
+Admin -> ZIP: Копировать inv.*.zip в \\server\ZIP
+
+== Финальная консолидация ==
+Admin -> StartInv: Start-Inventory -StartType CreateResult (...)
+activate StartInv
+    ref over StartInv, AnyComputers, Result, ZIP : UC-04 (полностью, как в диаграмме UC-04)
+    StartInv --> Admin
+deactivate StartInv
+
+@enduml
+
+
+### 13.6. Диаграмма последовательности UC-06
+
+@startuml
+'UC-06: Асинхронный сбор с сетевых компьютеров
+actor "Scheduled Task" as Scheduler
+participant ":Start-Inventory" as StartInv
+participant ":InvAnyComputers" as AnyComputers
+participant ":Computer" as Comp
+
+Scheduler -> StartInv: Start-Inventory -StartType InvLocal (...)
+
+activate StartInv
+
+ref over StartInv, AnyComputers : UC-INC-01: Проверка и подготовка инфраструктуры\n(проверка/создание сетевого каталога InvAnyComputers, InvLogs)
+
+ref over StartInv : UC-INC-05: Валидация типов собираемой информации\n (получение списка типов для сбора)
+
+ref over StartInv, AnyComputers, Comp : UC-INC-02: Проверка актуальности информации\n(проверка наличия файлов в сетевом каталоге,\n сравнение с DayOld)
+
+alt требуется сбор
+    loop для каждого типа информации
+        StartInv -> Comp: Локальный сбор
+        activate Comp
+            Comp --> StartInv: Инвентаризационная информация
+        deactivate Comp
+
+        StartInv -> AnyComputers: Сохранить файл ComputerName.Тип.csv\n(непосредственно в сетевой каталог)
+    end
+else информация актуальна
+    StartInv -> StartInv: Логировать пропуск
+end
+
+StartInv --> Scheduler: Завершено
+deactivate StartInv
+@enduml
+
