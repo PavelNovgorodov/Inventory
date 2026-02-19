@@ -1149,24 +1149,24 @@ Start-Inventory -StartType InvRemote `
 
 ### 13.1. Диаграмма последовательности UC-01
 
-![Диаграмма](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/PavelNovgorodov/Inventory/main/diagrams/UC-01.puml)
+![Диаграмма1](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/PavelNovgorodov/Inventory/main/diagrams/UC-01.puml)
 
 ### 13.2. Диаграмма последовательности UC-02
 
-![Диаграмма](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/PavelNovgorodov/Inventory/main/diagrams/UC-02.puml)
+![Диаграмма2](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/PavelNovgorodov/Inventory/main/diagrams/UC-02.puml)
 
 ### 13.3. Диаграмма последовательности UC-03
 
-![Диаграмма](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/PavelNovgorodov/Inventory/main/diagrams/UC-03.puml)
+![Диаграмма3](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/PavelNovgorodov/Inventory/main/diagrams/UC-03.puml)
 
 ### 13.4. Диаграмма последовательности UC-04
 
-![Диаграмма](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/PavelNovgorodov/Inventory/main/diagrams/UC-04.puml)
+![Диаграмма4](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/PavelNovgorodov/Inventory/main/diagrams/UC-04.puml)
 
 ### 13.5. Диаграмма последовательности UC-05
 
-![Диаграмма](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/PavelNovgorodov/Inventory/main/diagrams/UC-05.puml)
+![Диаграмма5](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/PavelNovgorodov/Inventory/main/diagrams/UC-05.puml)
 
 ### 13.6. Диаграмма последовательности UC-06
 
-![Диаграмма](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/PavelNovgorodov/Inventory/main/diagrams/UC-06.puml)
+![Диаграмма6](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/PavelNovgorodov/Inventory/main/diagrams/UC-06.puml)
