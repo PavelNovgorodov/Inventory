@@ -1149,7 +1149,7 @@ Start-Inventory -StartType InvRemote `
 
 ### 13.1. Диаграмма последовательности UC-01
 
-![Диаграмма](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/PavelNovgorodov/Inventory/blob/main/diagrams/UC-01.puml)
+![Диаграмма](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/PavelNovgorodov/Inventory/main/diagrams/UC-01.puml)
 
 
 ```
