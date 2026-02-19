@@ -1,5 +1,5 @@
 @startuml UC-01
-'UC-01: Удаленный сбор инвентаризационной информации со всего домена.
+'UC-01: Удаленный сбор инвентаризационной информации со всего домена
 actor Admin
 participant ":Start-Inventory" as StartInv
 participant ":InvAnyComputers" as AnyComputers
