@@ -1,0 +1,37 @@
+@startuml
+' UC-INC-05: Валидация типов собираемой информации
+participant ":Start-Inventory" as StartInv
+participant ":SelectInvType" as SelectType
+participant ":Get-Inventory-Module" as ModuleRepo
+participant "Пользователь" as User
+
+StartInv -> SelectType: Выполнить валидацию(selectInvTypeParam)
+activate SelectType
+
+alt selectInvTypeParam == "select"
+  SelectType -> User: Отобразить список доступных типов\n(интерактивный выбор)
+  User --> SelectType: Выбранные типы (или отмена)
+  alt пользователь отменил выбор
+    SelectType -> StartInv: Сигнал об отмене
+  else выбор сделан
+    SelectType -> ModuleRepo: Проверить наличие модулей(выбранные типы)
+    activate ModuleRepo
+    ModuleRepo --> SelectType: Список валидных типов
+    deactivate ModuleRepo
+    SelectType -> StartInv: Возврат валидных типов
+  end
+else selectInvTypeParam задан списком
+  SelectType -> ModuleRepo: Проверить каждый тип из списка
+  activate ModuleRepo
+  ModuleRepo --> SelectType: Отфильтрованный список валидных типов
+  deactivate ModuleRepo
+  SelectType -> StartInv: Возврат валидных типов
+else selectInvTypeParam не задан
+  SelectType -> ModuleRepo: Получить все доступные типы
+  activate ModuleRepo
+  ModuleRepo --> SelectType: Полный список
+  deactivate ModuleRepo
+  SelectType -> StartInv: Возврат всех типов
+end
+deactivate SelectType
+@enduml

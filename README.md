@@ -1147,36 +1147,70 @@ Start-Inventory -StartType InvRemote `
 
 ## 13. Приложения
 
-### 13.1. Диаграмма последовательности UC-01 (Удаленный сбор инвентаризационной информации со всего домена)
+### 13.1 Диаграммы последовательности (sequence) для Use Case
+
+*Файлы диаграмм последовательности в формате PlantUML расположены в каталоге `diagrams`.*
+
+**UC-01 (Удаленный сбор инвентаризационной информации со всего домена)**
 
 ![Диаграмма1](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/PavelNovgorodov/Inventory/main/diagrams/UC-01.puml)
 
 ---
 
-### 13.2. Диаграмма последовательности UC-02 (Локальный сбор инвентаризационной информации с автономного компьютера)
+**UC-02 (Локальный сбор инвентаризационной информации с автономного компьютера)**
 
 ![Диаграмма2](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/PavelNovgorodov/Inventory/main/diagrams/UC-02.puml)
 
 ---
 
-### 13.3. Диаграмма последовательности UC-03 (Выборочный сбор определенных типов инвентаризационной информации)
+**UC-03 (Выборочный сбор определенных типов инвентаризационной информации)**
 
 ![Диаграмма3](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/PavelNovgorodov/Inventory/main/diagrams/UC-03.puml)
 
 ---
 
-### 13.4. Диаграмма последовательности UC-04 (Объединение инвентаризационной информации для анализа)
+**UC-04 (Объединение инвентаризационной информации для анализа)**
 
 ![Диаграмма4](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/PavelNovgorodov/Inventory/main/diagrams/UC-04.puml)
 
 ---
 
-### 13.5. Диаграмма последовательности UC-05 (Гибридный сбор из разных доменов и сегментов сети)
+**UC-05 (Гибридный сбор из разных доменов и сегментов сети)**
 
 ![Диаграмма5](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/PavelNovgorodov/Inventory/main/diagrams/UC-05.puml)
 
 ---
 
-### 13.6. Диаграмма последовательности UC-06 (Асинхронный сбор с сетевых компьютеров)
+**UC-06 (Асинхронный сбор с сетевых компьютеров)**
 
 ![Диаграмма6](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/PavelNovgorodov/Inventory/main/diagrams/UC-06.puml)
+
+---
+
+**UC-INC-01 (Проверка и подготовка инфраструктуры)**
+
+![Диаграмма7](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/PavelNovgorodov/Inventory/main/diagrams/UC-INC-01.puml)
+
+---
+
+**UC-INC-02 (Проверка актуальности информации)**
+
+![Диаграмма8](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/PavelNovgorodov/Inventory/main/diagrams/UC-INC-02.puml)
+
+---
+
+**UC-INC-03 (Получение перечня компьютеров)**
+
+![Диаграмма9](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/PavelNovgorodov/Inventory/main/diagrams/UC-INC-03.puml)
+
+---
+
+**UC-INC-04 (Проверка доступности компьютера)**
+
+![Диаграмма10](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/PavelNovgorodov/Inventory/main/diagrams/UC-INC-04.puml)
+
+---
+
+**UC-INC-05 (Валидация типов собираемой информации)**
+
+![Диаграмма11](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/PavelNovgorodov/Inventory/main/diagrams/UC-INC-05.puml)

@@ -1,0 +1,31 @@
+@startuml
+' UC-INC-01: Проверка и подготовка инфраструктуры
+participant ":Start-Inventory" as StartInv
+participant ":CheckFolder" as CheckFolder
+participant ":InvAnyComputers" as AnyComputers
+participant ":InvResult" as Result
+participant ":InvFolderLog" as LogFolder
+
+StartInv -> CheckFolder: Выполнить проверку инфраструктуры
+activate CheckFolder
+
+CheckFolder -> AnyComputers: Проверить доступность / создать каталог
+activate AnyComputers
+AnyComputers --> CheckFolder: OK / создан
+deactivate AnyComputers
+
+CheckFolder -> Result: Проверить доступность / создать каталог
+activate Result
+Result --> CheckFolder: OK / создан
+deactivate Result
+
+CheckFolder -> LogFolder: Проверить доступность / создать каталог (если параметр задан)
+activate LogFolder
+LogFolder --> CheckFolder: OK / создан
+deactivate LogFolder
+
+CheckFolder -> CheckFolder: Выполнить ротацию лог-файлов\n(для удалённого сбора/консолидации: оставить 20 последних;\nдля локального сбора: контроль размера файла)
+
+CheckFolder --> StartInv: Готово
+deactivate CheckFolder
+@enduml

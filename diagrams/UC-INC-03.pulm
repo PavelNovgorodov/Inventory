@@ -1,0 +1,40 @@
+@startuml
+' UC-INC-03: Получение перечня компьютеров
+participant ":Start-Inventory" as StartInv
+participant ":ListComputers" as ListComp
+participant ":ActiveDirectory" as AD
+participant ":Файл со списком" as File
+
+StartInv -> ListComp: Вызвать получение списка компьютеров\n(с параметрами InvOU, InvComputerList)
+activate ListComp
+
+ListComp -> ListComp: Проверить взаимоисключение параметров
+
+alt задан InvOU
+  ListComp -> AD: Проверить существование OU
+  activate AD
+  AD --> ListComp: Результат
+  deactivate AD
+  alt OU существует
+    ListComp -> AD: Запросить компьютеры из OU (с учётом DayOld)
+    AD --> ListComp: Список имён
+  else OU не существует
+    ListComp -> ListComp: Сгенерировать ошибку
+  end
+else задан InvComputerList с префиксом "file:"
+  ListComp -> File: Прочитать CSV-файл со списком
+  activate File
+  File --> ListComp: Список ComputerName
+  deactivate File
+else задан InvComputerList без префикса (простой список)
+  ListComp -> ListComp: Использовать переданный массив имён
+else параметры не заданы
+  ListComp -> AD: Определить текущее OU компьютера
+  AD --> ListComp: Текущее OU
+  ListComp -> AD: Получить компьютеры из текущего OU
+  AD --> ListComp: Список имён
+end
+
+ListComp --> StartInv: Итоговый список компьютеров
+deactivate ListComp
+@enduml

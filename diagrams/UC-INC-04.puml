@@ -1,0 +1,28 @@
+@startuml
+' UC-INC-04: Проверка доступности компьютера
+participant ":Start-Inventory" as StartInv
+participant ":Computer" as Comp
+
+StartInv -> Comp: Проверить сетевую доступность (Test-Connection)
+activate Comp
+Comp --> StartInv: Доступен / недоступен
+deactivate Comp
+
+alt компьютер доступен по сети
+  StartInv -> Comp: Проверить доступность WinRM (Test-WSMan)
+  activate Comp
+  Comp --> StartInv: Доступен / недоступен
+  deactivate Comp
+
+  alt WinRM доступен
+    StartInv -> Comp: Проверить наличие административных прав\n(попытка открыть CIM-сессию)
+    activate Comp
+    Comp --> StartInv: Есть права / нет прав
+    deactivate Comp
+  else WinRM недоступен
+    StartInv -> StartInv: Зафиксировать ошибку
+  end
+else компьютер недоступен по сети
+  StartInv -> StartInv: Зафиксировать ошибку
+end
+@enduml

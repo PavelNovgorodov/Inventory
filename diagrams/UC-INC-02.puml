@@ -1,0 +1,25 @@
+@startuml
+' UC-INC-02: Проверка актуальности информации
+participant ":Start-Inventory" as StartInv
+participant ":InvAnyComputers" as AnyComputers
+
+StartInv -> StartInv: Получить имя текущего компьютера и параметр DayOld/InvRemoteDayOld
+
+StartInv -> AnyComputers: Запросить список файлов ComputerName.*.csv
+activate AnyComputers
+AnyComputers --> StartInv: Список файлов с датами изменения
+deactivate AnyComputers
+
+alt список не пуст
+  StartInv -> StartInv: Определить максимальную дату среди файлов
+  StartInv -> StartInv: Вычислить разницу с текущей датой
+  alt разница <= допустимого возраста
+    StartInv -> StartInv: Принять решение "информация актуальна, сбор не требуется"
+  else разница > допустимого возраста
+    StartInv -> StartInv: Принять решение "требуется сбор"
+  end
+else список пуст
+  StartInv -> StartInv: Принять решение "требуется сбор"
+end
+@enduml
+
