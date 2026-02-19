@@ -1147,36 +1147,36 @@ Start-Inventory -StartType InvRemote `
 
 ## 13. Приложения
 
-### 13.1. Диаграмма последовательности UC-01
+### 13.1. Диаграмма последовательности UC-01 (Удаленный сбор инвентаризационной информации со всего домена)
 
 ![Диаграмма1](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/PavelNovgorodov/Inventory/main/diagrams/UC-01.puml)
 
 ---
 
-### 13.2. Диаграмма последовательности UC-02
+### 13.2. Диаграмма последовательности UC-02 (Локальный сбор инвентаризационной информации с автономного компьютера)
 
 ![Диаграмма2](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/PavelNovgorodov/Inventory/main/diagrams/UC-02.puml)
 
 ---
 
-### 13.3. Диаграмма последовательности UC-03
+### 13.3. Диаграмма последовательности UC-03 (Выборочный сбор определенных типов инвентаризационной информации)
 
 ![Диаграмма3](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/PavelNovgorodov/Inventory/main/diagrams/UC-03.puml)
 
 ---
 
-### 13.4. Диаграмма последовательности UC-04
+### 13.4. Диаграмма последовательности UC-04 (Объединение инвентаризационной информации для анализа)
 
 ![Диаграмма4](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/PavelNovgorodov/Inventory/main/diagrams/UC-04.puml)
 
 ---
 
-### 13.5. Диаграмма последовательности UC-05
+### 13.5. Диаграмма последовательности UC-05 (Гибридный сбор из разных доменов и сегментов сети)
 
 ![Диаграмма5](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/PavelNovgorodov/Inventory/main/diagrams/UC-05.puml)
 
 ---
 
-### 13.6. Диаграмма последовательности UC-06
+### 13.6. Диаграмма последовательности UC-06 (Асинхронный сбор с сетевых компьютеров)
 
 ![Диаграмма6](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/PavelNovgorodov/Inventory/main/diagrams/UC-06.puml)
