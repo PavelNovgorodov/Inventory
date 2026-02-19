@@ -1149,7 +1149,9 @@ Start-Inventory -StartType InvRemote `
 
 ### 13.1. Диаграмма последовательности UC-01
 
-@startuml
+<div hidden>
+```
+@startuml UC-01
 'UC-01: Удаленный сбор инвентаризационной информации со всего домена.
 actor Admin
 participant ":Start-Inventory" as StartInv
@@ -1196,6 +1198,12 @@ ref over StartInv, AnyComputers, Result : UC-04: Консолидация и о�
 StartInv --> Admin: Готово
 deactivate StartInv
 @enduml
+
+```
+</div>
+
+![](UC-01.svg)
+
 
 ### 13.2. Диаграмма последовательности UC-02
 
