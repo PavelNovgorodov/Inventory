@@ -1151,21 +1151,31 @@ Start-Inventory -StartType InvRemote `
 
 ![Диаграмма1](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/PavelNovgorodov/Inventory/main/diagrams/UC-01.puml)
 
+---
+
 ### 13.2. Диаграмма последовательности UC-02
 
 ![Диаграмма2](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/PavelNovgorodov/Inventory/main/diagrams/UC-02.puml)
+
+---
 
 ### 13.3. Диаграмма последовательности UC-03
 
 ![Диаграмма3](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/PavelNovgorodov/Inventory/main/diagrams/UC-03.puml)
 
+---
+
 ### 13.4. Диаграмма последовательности UC-04
 
 ![Диаграмма4](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/PavelNovgorodov/Inventory/main/diagrams/UC-04.puml)
 
+---
+
 ### 13.5. Диаграмма последовательности UC-05
 
 ![Диаграмма5](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/PavelNovgorodov/Inventory/main/diagrams/UC-05.puml)
+
+---
 
 ### 13.6. Диаграмма последовательности UC-06
 
