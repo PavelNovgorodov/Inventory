@@ -1,0 +1,24 @@
+name: Generate PlantUML diagrams
+on:
+  push:
+    paths:
+      - '**.puml'          # запускать только при изменениях в файлах .puml
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4   # получаем код репозитория
+
+      - name: Generate SVG diagrams
+        uses: holising/plantuml-action@v2
+        with:
+          args: -tsvg diagrams/*.puml -o images/   # параметры PlantUML
+
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add images/
+          git diff --quiet && git diff --staged --quiet || git commit -m "Auto-generate diagrams"
+          git push
