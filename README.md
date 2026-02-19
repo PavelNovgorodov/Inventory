@@ -1149,7 +1149,6 @@ Start-Inventory -StartType InvRemote `
 
 ### 13.1. Диаграмма последовательности UC-01
 
-<div hidden>
 ```
 @startuml UC-01
 'UC-01: Удаленный сбор инвентаризационной информации со всего домена.
@@ -1200,14 +1199,11 @@ deactivate StartInv
 @enduml
 
 ```
-</div>
-
-![](UC-01.svg)
-
 
 ### 13.2. Диаграмма последовательности UC-02
 
-@startuml
+```
+@startuml UC-02
 'UC-02: Локальный сбор с автономного компьютера
 actor "Scheduled Task" as Scheduler
 participant ":Start-Inventory" as StartInv
@@ -1247,10 +1243,12 @@ end
 StartInv --> Scheduler: Завершено
 deactivate StartInv
 @enduml
+```
 
 ### 13.3. Диаграмма последовательности UC-03
 
-@startuml
+```
+@startuml UC-03
 'UC-03: Выборочный сбор определенных типов информации
 actor Admin
 participant ":Start-Inventory" as StartInv
@@ -1294,11 +1292,12 @@ end
 StartInv --> Admin: Сбор завершён
 deactivate StartInv
 @enduml
-
+```
 
 ### 13.4. Диаграмма последовательности UC-04
 
-@startuml
+```
+@startuml UC-04
 'UC-04: Объединение инвентаризационной информации для анализа
 actor Manager
 participant ":Start-Inventory" as StartInv
@@ -1344,11 +1343,12 @@ deactivate Result
 StartInv --> Manager: Готово
 deactivate StartInv
 @enduml
-
+```
 
 ### 13.5. Диаграмма последовательности UC-05
 
-@startuml
+```
+@startuml UC-05
 'UC-05: Гибридный сбор из разных доменов и сегментов сети
 actor Admin
 participant ":Start-Inventory" as StartInv
@@ -1405,11 +1405,12 @@ activate StartInv
 deactivate StartInv
 
 @enduml
-
+```
 
 ### 13.6. Диаграмма последовательности UC-06
 
-@startuml
+````
+@startuml UC-06
 'UC-06: Асинхронный сбор с сетевых компьютеров
 actor "Scheduled Task" as Scheduler
 participant ":Start-Inventory" as StartInv
@@ -1442,4 +1443,4 @@ end
 StartInv --> Scheduler: Завершено
 deactivate StartInv
 @enduml
-
+```
