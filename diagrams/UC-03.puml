@@ -1,0 +1,44 @@
+@startuml UC-03
+'UC-03: Выборочный сбор определенных типов информации
+actor Admin
+participant ":Start-Inventory" as StartInv
+participant ":InvAnyComputers" as AnyComputers
+participant ":Computer" as Comp
+participant ":ActiveDirectory" as AD 
+
+Admin -> StartInv: Start-Inventory -StartType InvRemote\n -SelectInvType hwr,swr,net (...)
+
+activate StartInv
+
+ref over StartInv, AnyComputers : UC-INC-01: Проверка и подготовка инфраструктуры\n(проверка/создание каталога InvAnyComputers)
+
+ref over StartInv : UC-INC-05: Валидация типов собираемой информации\n(фильтрация по переданным типам)
+
+ref over StartInv, AD : UC-INC-03: Получение перечня компьютеров\n(из параметра -InvComputerList, файла или OU)
+
+loop для каждого компьютера в списке
+    ref over StartInv, AnyComputers, Comp : UC-INC-02: Проверка актуальности информации\n(проверка наличия файлов в InvAnyComputers,\n сравнение с InvRemoteDayOld)
+
+    alt требуется сбор
+        ref over StartInv, Comp : UC-INC-04: Проверка доступности компьютера
+
+        alt компьютер доступен
+            loop для каждого выбранного типа
+                StartInv -> Comp: Удалённый сбор определенных типов
+                activate Comp
+                    Comp --> StartInv: Инвентаризационная информация
+                deactivate Comp
+
+                StartInv -> AnyComputers: Сохранить файл ComputerName.Тип.csv
+            end
+        else недоступен
+            StartInv -> StartInv: Логировать ошибку
+        end
+    else информация актуальна
+        StartInv -> StartInv: Логировать пропуск
+    end
+end
+
+StartInv --> Admin: Сбор завершён
+deactivate StartInv
+@enduml

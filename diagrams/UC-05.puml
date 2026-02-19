@@ -1,0 +1,57 @@
+@startuml UC-05
+'UC-05: Гибридный сбор из разных доменов и сегментов сети
+actor Admin
+participant ":Start-Inventory" as StartInv
+participant ":InvAnyComputers" as AnyComputers
+participant ":InvResult" as Result
+participant ":InvFolderZIPFiles" as ZIP
+participant ":Computer" as Comp
+participant ":ActiveDirectory" as AD
+
+== Сбор из основного домена ==
+Admin -> StartInv: Start-Inventory -StartType InvRemote (...)
+activate StartInv
+
+ref over StartInv, AnyComputers : UC-INC-01: Проверка и подготовка инфраструктуры\n(проверка/создание каталогов InvAnyComputers, InvResult, InvLogs)
+ref over StartInv : UC-INC-05: Валидация типов собираемой информации\n(получение списка типов)
+ref over StartInv, AD : UC-INC-03: Получение перечня компьютеров\n(запрос к AD domain1, возврат списка)
+
+loop для каждого компьютера в списке
+  ref over StartInv, AnyComputers, Comp : UC-INC-02: Проверка актуальности информации\n(проверка наличия файлов в InvAnyComputers,\n сравнение с InvRemoteDayOld)
+  
+    alt требуется сбор
+        ref over StartInv, Comp : UC-INC-04: Проверка доступности компьютера
+    
+        alt компьютер доступен
+            loop для каждого типа информации
+                StartInv -> Comp: Удалённый сбор
+                activate Comp
+                    Comp --> StartInv: Инвентаризационная информация
+                deactivate Comp
+
+                StartInv -> AnyComputers: Сохранить файл ComputerName.Тип.csv
+            end
+        else недоступен
+            StartInv -> StartInv: Логировать ошибку
+        end
+    else информация актуальна
+        StartInv -> StartInv: Логировать пропуск
+    end
+end
+deactivate StartInv
+
+== Сбор из дополнительного домена ==
+Admin -> StartInv: Start-Inventory -StartType InvRemote (...)
+... (аналогично первому домену) ...
+
+== Ручной перенос ZIP из DMZ ==
+Admin -> ZIP: Копировать inv.*.zip в \\server\ZIP
+
+== Финальная консолидация ==
+Admin -> StartInv: Start-Inventory -StartType CreateResult (...)
+activate StartInv
+    ref over StartInv, AnyComputers, Result, ZIP : UC-04 (полностью, как в диаграмме UC-04)
+    StartInv --> Admin
+deactivate StartInv
+
+@enduml

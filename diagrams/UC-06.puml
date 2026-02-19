@@ -1,0 +1,33 @@
+@startuml UC-06
+'UC-06: Асинхронный сбор с сетевых компьютеров
+actor "Scheduled Task" as Scheduler
+participant ":Start-Inventory" as StartInv
+participant ":InvAnyComputers" as AnyComputers
+participant ":Computer" as Comp
+
+Scheduler -> StartInv: Start-Inventory -StartType InvLocal (...)
+
+activate StartInv
+
+ref over StartInv, AnyComputers : UC-INC-01: Проверка и подготовка инфраструктуры\n(проверка/создание сетевого каталога InvAnyComputers, InvLogs)
+
+ref over StartInv : UC-INC-05: Валидация типов собираемой информации\n (получение списка типов для сбора)
+
+ref over StartInv, AnyComputers, Comp : UC-INC-02: Проверка актуальности информации\n(проверка наличия файлов в сетевом каталоге,\n сравнение с DayOld)
+
+alt требуется сбор
+    loop для каждого типа информации
+        StartInv -> Comp: Локальный сбор
+        activate Comp
+            Comp --> StartInv: Инвентаризационная информация
+        deactivate Comp
+
+        StartInv -> AnyComputers: Сохранить файл ComputerName.Тип.csv\n(непосредственно в сетевой каталог)
+    end
+else информация актуальна
+    StartInv -> StartInv: Логировать пропуск
+end
+
+StartInv --> Scheduler: Завершено
+deactivate StartInv
+@enduml

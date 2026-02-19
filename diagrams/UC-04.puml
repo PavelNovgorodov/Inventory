@@ -1,0 +1,46 @@
+@startuml UC-04
+'UC-04: Объединение инвентаризационной информации для анализа
+actor Manager
+participant ":Start-Inventory" as StartInv
+participant ":InvAnyComputers" as AnyComputers
+participant ":InvResult" as Result
+participant ":InvFolderZIPFiles" as ZIP
+
+Manager -> StartInv: Start-Inventory -StartType CreateResult (...)
+
+activate StartInv
+
+ref over StartInv, AnyComputers, Result, ZIP : UC-INC-01: Проверка и подготовка инфраструктуры\n(проверка/создание каталогов)
+
+alt указан -InvFolderZIPFiles и каталог существует
+    StartInv -> ZIP: Найти все файлы inv.*.zip
+    activate ZIP
+        ZIP --> StartInv: Список ZIP-архивов
+    deactivate ZIP
+
+    loop для каждого ZIP
+        StartInv -> ZIP: Распаковать архив
+        ZIP --> StartInv: Файлы *.csv
+        StartInv -> AnyComputers: Сохранить распакованные файлы\n(с перезаписью)
+    end
+end
+
+alt указан -DayOld
+    StartInv -> AnyComputers: Удалить файлы старше DayOld
+end
+
+StartInv -> AnyComputers: Прочитать все файлы *.csv
+activate AnyComputers
+    AnyComputers --> StartInv: Список файлов и содержимое
+deactivate AnyComputers
+
+StartInv -> StartInv: Сгруппировать данные по типам
+
+StartInv -> Result: Записать итоговые файлы Тип.csv
+activate Result
+    Result --> StartInv: Подтверждение
+deactivate Result
+
+StartInv --> Manager: Готово
+deactivate StartInv
+@enduml

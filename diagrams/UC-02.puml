@@ -1,0 +1,40 @@
+@startuml UC-02
+'UC-02: Локальный сбор с автономного компьютера
+actor "Scheduled Task" as Scheduler
+participant ":Start-Inventory" as StartInv
+participant ":InvAnyComputers" as AnyComputers
+participant ":InvFolderZIPFiles" as ZIP
+participant ":Computer" as Comp
+
+Scheduler -> StartInv: Start-Inventory -StartType InvLocal (...)
+
+activate StartInv
+
+ref over StartInv, AnyComputers, ZIP : UC-INC-01: Проверка и подготовка инфраструктуры\n(проверка/создание локальных каталогов)
+
+ref over StartInv : UC-INC-05: Валидация типов собираемой информации\n(получение списка типов)
+
+ref over StartInv, AnyComputers, Comp : UC-INC-02: Проверка актуальности информации\n(проверка наличия файлов в InvAnyComputers,\n сравнение с DayOld)
+
+alt требуется сбор
+    loop для каждого типа информации
+        StartInv -> Comp: Локальный сбор
+        activate Comp
+            Comp --> StartInv: Инвентаризационная информация
+        deactivate Comp
+
+        StartInv -> AnyComputers: Сохранить файл ComputerName.Тип.csv
+    end
+
+    alt указан параметр -InvFolderZIPFiles
+        StartInv -> AnyComputers: Прочитать все собранные файлы
+        AnyComputers --> StartInv: Файлы
+        StartInv -> ZIP: Упаковать файлы в inv.ComputerName.zip\nи сохранить в ZIP-каталог
+    end
+else информация актуальна
+    StartInv -> StartInv: Логировать пропуск
+end
+
+StartInv --> Scheduler: Завершено
+deactivate StartInv
+@enduml
