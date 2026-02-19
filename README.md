@@ -1149,6 +1149,9 @@ Start-Inventory -StartType InvRemote `
 
 ### 13.1. Диаграмма последовательности UC-01
 
+![Диаграмма](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/PavelNovgorodov/Inventory/blob/main/diagrams/UC-01.puml)
+
+
 ```
 @startuml UC-01
 'UC-01: Удаленный сбор инвентаризационной информации со всего домена.
