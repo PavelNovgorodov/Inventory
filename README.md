@@ -1147,9 +1147,11 @@ Start-Inventory -StartType InvRemote `
 
 ## 13. Приложения
 
+*Файлы диаграмм последовательности в формате PlantUML расположены в каталоге `diagrams`.*
+
 ### 13.1 Диаграммы последовательности (sequence) для Use Case
 
-*Файлы диаграмм последовательности в формате PlantUML расположены в каталоге `diagrams`.*
+#### 13.1.1. Основные сценарии использования
 
 **UC-01 (Удаленный сбор инвентаризационной информации со всего домена)**
 
@@ -1186,6 +1188,8 @@ Start-Inventory -StartType InvRemote `
 ![Диаграмма6](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/PavelNovgorodov/Inventory/main/diagrams/UC-06.puml)
 
 ---
+
+#### 13.1.2. Общие включаемые сценарии
 
 **UC-INC-01 (Проверка и подготовка инфраструктуры)**
 
